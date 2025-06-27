@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="text-2xl font-bold mb-6">{{ board.name }}</h1>
+
+<div class="flex space-x-4 overflow-x-auto">
+  {% for list in board.lists.all %}
+    <div class="bg-white shadow rounded-lg p-4 w-80 min-w-[20rem]">
+      <h2 class="text-lg font-semibold mb-2">{{ list.name }}</h2>
+
+      {% for task in list.tasks.all %}
+        <div class="bg-gray-100 p-2 mb-2 rounded">
+          <p class="font-medium">{{ task.title }}</p>
+          {% if task.description %}
+            <p class="text-sm text-gray-600">{{ task.description }}</p>
+          {% endif %}
+        </div>
+      {% empty %}
+        <p class="text-sm text-gray-400">No tasks yet.</p>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
