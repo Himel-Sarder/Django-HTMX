@@ -2,20 +2,15 @@
 
 > In this part, you'll create your **first HTMX interaction**: a button that loads a partial view into the page **without reloading**.
 
----
-
 ### Goal:
 
 * Use `hx-get`, `hx-target`, and `hx-swap`
 * Understand how HTMX communicates with Django
 * Load a small HTML block (a partial) dynamically
 
----
-
 ### What we’ll Build:
 
 On the home page, you’ll click a **“Load Welcome Message”** button, and HTMX will fetch the message from a Django view and insert it into the page — **without reloading**.
-
 
 ### Inside the content block:
 
