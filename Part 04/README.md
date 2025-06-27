@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/ac1b25a9-e7dc-4dcc-8ce9-3943c474364e)
+
 ```html
 <form
     hx-post="{% url 'add-task' list_id %}"
