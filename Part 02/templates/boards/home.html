@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-4">Welcome to TaskForge </h1>
+
+<!-- HTMX Button -->
+<button
+    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition"
+    hx-get="{% url 'load-welcome' %}"
+    hx-target="#welcome-box"
+    hx-swap="innerHTML">
+    Load Welcome Message
+</button>
+
+<!-- Target container where partial will be injected -->
+<div id="welcome-box" class="mt-4"></div>
+{% endblock %}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TaskForge</title>
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <!-- Use Tailwind's Play CDN (DEV ONLY - Not for production) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+    <div class="container mx-auto py-8">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
