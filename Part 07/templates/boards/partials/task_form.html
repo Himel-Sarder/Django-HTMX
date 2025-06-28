@@ -1,0 +1,23 @@
+<form
+    hx-post="{% url 'add-task' list_id %}"
+    hx-target="#list-{{ list_id }}-tasks"
+    hx-swap="beforeend"
+    class="space-y-2 mt-3"
+    method="POST"
+>
+    {% csrf_token %}
+
+    <input type="text" name="title" placeholder="Title" required
+        class="w-full px-2 py-1 border rounded">
+
+    <textarea name="description" placeholder="Description"
+        class="w-full px-2 py-1 border rounded"></textarea>
+
+    <input type="date" name="due_date"
+        class="w-full px-2 py-1 border rounded">
+
+    <button type="submit"
+        class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
+        Add Task
+    </button>
+</form>
