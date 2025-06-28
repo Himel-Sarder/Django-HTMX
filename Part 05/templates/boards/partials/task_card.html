@@ -1,0 +1,19 @@
+<div class="bg-white p-2 mb-2 rounded shadow">
+    <div class="flex justify-between">
+        <div>
+            <p class="font-medium">{{ task.title }}</p>
+            {% if task.description %}
+                <p class="text-sm text-gray-600">{{ task.description }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Delete Button -->
+        <button
+            hx-delete="{% url 'delete-task' task.id %}"
+            hx-target="#list-{{ task.list.id }}-tasks"
+            hx-swap="outerHTML"
+            hx-confirm="Are you sure you want to delete this task?"
+            class="text-red-600 font-bold hover:text-red-800 ml-4"
+        > ❌ </button>
+    </div>
+</div>
