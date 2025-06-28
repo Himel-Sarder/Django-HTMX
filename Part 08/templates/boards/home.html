@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 class="text-3xl font-bold mb-6">TaskForge</h1>
+
+<div id="board-container">
+    {% include 'boards/partials/filter_controls.html' %}
+
+    <div class="flex space-x-4 overflow-x-auto">
+        {% for list in board.lists.all %}
+            <div class="bg-gray-50 shadow rounded-lg p-4 w-80 min-w-[20rem]">
+                <h2 class="text-xl font-semibold mb-2">{{ list.name }}</h2>
+
+                <!-- Task Container -->
+                <div id="list-{{ list.id }}-tasks">
+                    {% for task in list.tasks.all %}
+                        {% include 'boards/partials/task_card.html' with task=task %}
+                    {% endfor %}
+                </div>
+
+                <hr class="my-3">
+
+                <!-- Task Form -->
+                {% include 'boards/partials/task_form.html' with list_id=list.id %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

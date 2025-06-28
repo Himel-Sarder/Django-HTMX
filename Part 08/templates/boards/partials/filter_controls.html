@@ -1,0 +1,22 @@
+<div class="flex space-x-2 mb-4">
+    <button hx-get="?filter=all"
+            hx-target="#board-container"
+            hx-swap="outerHTML"
+            class="px-4 py-2 rounded {% if filter_type == 'all' %}bg-blue-600 text-white{% else %}bg-gray-200{% endif %}">
+        All Tasks
+    </button>
+
+    <button hx-get="?filter=active"
+            hx-target="#board-container"
+            hx-swap="outerHTML"
+            class="px-4 py-2 rounded {% if filter_type == 'active' %}bg-blue-600 text-white{% else %}bg-gray-200{% endif %}">
+        Active
+    </button>
+
+    <button hx-get="?filter=completed"
+            hx-target="#board-container"
+            hx-swap="outerHTML"
+            class="px-4 py-2 rounded {% if filter_type == 'completed' %}bg-blue-600 text-white{% else %}bg-gray-200{% endif %}">
+        Completed
+    </button>
+</div>
