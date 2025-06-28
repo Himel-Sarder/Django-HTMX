@@ -1,0 +1,39 @@
+<div id="task-{{ task.id }}" class="task-card bg-white p-2 mb-2 rounded shadow">
+    <div class="flex justify-between">
+        <div>
+            <p class="font-medium">{{ task.title }}</p>
+            {% if task.description %}
+                <p class="text-sm text-gray-600">{{ task.description }}</p>
+            {% endif %}
+            {% if task.due_date %}
+                <p class="text-xs text-gray-500">Due: {{ task.due_date|date:"M d, Y" }}</p>
+            {% endif %}
+        </div>
+
+        <div class="flex space-x-2">
+            <!-- Edit Button -->
+            <button
+                hx-get="{% url 'edit-task' task.id %}"
+                hx-target="#task-{{ task.id }}"
+                hx-swap="outerHTML"
+                hx-trigger="click"
+                class="text-blue-600 hover:text-blue-800"
+                title="Edit"
+            >
+                ✏️
+            </button>
+
+            <!-- Delete Button -->
+            <button
+                hx-delete="{% url 'delete-task' task.id %}"
+                hx-target="#list-{{ task.list.id }}-tasks"
+                hx-swap="outerHTML"
+                hx-confirm="Are you sure you want to delete this task?"
+                class="text-red-600 hover:text-red-800"
+                title="Delete"
+            >
+                ❌
+            </button>
+        </div>
+    </div>
+</div>
