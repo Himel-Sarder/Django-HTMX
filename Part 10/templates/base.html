@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskForge</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- HTMX -->
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.10/dist/ext/ws.js"></script>
+
+  <!-- SortableJS -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+    [x-cloak] { display: none !important; }
+
+    .sortable-chosen {
+      opacity: 0.9;
+      transform: scale(1.03);
+    }
+
+    .sortable-ghost {
+      opacity: 0.5;
+      background: #e0f2fe;
+      border: 2px dashed #60a5fa;
+    }
+
+    .task-card {
+      transition: all 0.3s ease-in-out;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900 min-h-screen">
+  <main class="w-full px-6 py-8 animate-fade-in overflow-x-hidden">
+    {% block content %}{% endblock %}
+  </main>
+
+  <script>
+    // Initialize SortableJS for both lists and tasks
+    function initSortable() {
+      // Task lists
+      document.querySelectorAll('.sortable-task-list').forEach(list => {
+        if (list.dataset.sortableInitialized) return;
+        list.dataset.sortableInitialized = true;
+
+        new Sortable(list, {
+          animation: 200,
+          ghostClass: 'sortable-ghost',
+          chosenClass: 'sortable-chosen',
+          onEnd: function(evt) {
+            const listId = list.dataset.listId;
+            const taskIds = Array.from(list.children)
+              .map(item => item.id?.replace('task-', ''))
+              .filter(id => id);
+
+            htmx.ajax('POST', `/lists/${listId}/reorder-tasks/`, {
+              target: `#list-${listId}-tasks`,
+              swap: 'outerHTML',
+              values: { task_ids: taskIds }
+            });
+          }
+        });
+      });
+
+      // Board lists
+      const boardContainer = document.getElementById('board-container');
+      if (boardContainer && !boardContainer.dataset.sortableInitialized) {
+        boardContainer.dataset.sortableInitialized = true;
+
+        new Sortable(boardContainer.querySelector('.lists-container'), {
+          animation: 200,
+          handle: '.list-handle',
+          ghostClass: 'sortable-ghost',
+          chosenClass: 'sortable-chosen',
+          onEnd: function(evt) {
+            const listIds = Array.from(evt.from.children)
+              .map(item => item.id?.replace('list-', ''))
+              .filter(id => id);
+
+            htmx.ajax('POST', '/lists/reorder/', {
+              values: { list_ids: listIds }
+            });
+          }
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initSortable);
+    document.body.addEventListener('htmx:afterSwap', initSortable);
+
+    // CSRF for HTMX
+    document.body.addEventListener('htmx:configRequest', function(event) {
+      const token = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+      if (token) {
+        event.detail.headers['X-CSRFToken'] = token;
+      }
+    });
+
+    // Error handling
+    document.body.addEventListener('htmx:beforeSwap', function(evt) {
+      if (evt.detail.xhr.status === 404) {
+        evt.detail.shouldSwap = true;
+        evt.detail.target = document.getElementById('board-container');
+      }
+    });
+  </script>
+</body>
+</html>

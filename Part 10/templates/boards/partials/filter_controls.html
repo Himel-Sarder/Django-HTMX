@@ -1,0 +1,31 @@
+<div class="flex items-center space-x-4 mb-6">
+    <span class="text-sm font-medium text-gray-500">Filter:</span>
+    <a hx-get="?filter=all"
+       hx-target="#board-container"
+       hx-push-url="true"
+       class="px-3 py-1 rounded-full text-sm font-medium transition-all cursor-pointer
+              {% if filter_type == 'all' %}bg-indigo-100 text-indigo-800{% else %}hover:bg-gray-100{% endif %}">
+        All Tasks
+    </a>
+    <a hx-get="?filter=active"
+       hx-target="#board-container"
+       hx-push-url="true"
+       class="px-3 py-1 rounded-full text-sm font-medium transition-all cursor-pointer
+              {% if filter_type == 'active' %}bg-green-100 text-green-800{% else %}hover:bg-gray-100{% endif %}">
+        Active
+    </a>
+    <a hx-get="?filter=completed"
+       hx-target="#board-container"
+       hx-push-url="true"
+       class="px-3 py-1 rounded-full text-sm font-medium transition-all cursor-pointer
+              {% if filter_type == 'completed' %}bg-purple-100 text-purple-800{% else %}hover:bg-gray-100{% endif %}">
+        Completed
+    </a>
+    <a hx-get="?filter=overdue"
+       hx-target="#board-container"
+       hx-push-url="true"
+       class="px-3 py-1 rounded-full text-sm font-medium transition-all cursor-pointer
+              {% if filter_type == 'overdue' %}bg-red-100 text-red-800{% else %}hover:bg-gray-100{% endif %}">
+        Overdue
+    </a>
+</div>

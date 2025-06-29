@@ -1,0 +1,31 @@
+<div id="board-container">
+  {% include 'boards/partials/filter_controls.html' with filter_type=filter_type %}
+
+  <div class="lists-container flex gap-6 overflow-x-auto pb-6 scroll-smooth snap-x snap-mandatory scrollbar-hide">
+    {% for list in lists %}
+      <div id="list-{{ list.id }}" class="bg-gradient-to-br from-white to-gray-50 border border-gray-100 rounded-3xl shadow-lg p-6 w-80 min-w-[20rem] snap-start">
+        <h2 class="text-2xl font-bold text-indigo-600 mb-4">{{ list.name }}</h2>
+
+        <div id="list-{{ list.id }}-tasks" data-list-id="{{ list.id }}" class="sortable-task-list space-y-3 min-h-[100px]">
+          {% for task in list.filtered_tasks %}
+            {% include 'boards/partials/task_card.html' with task=task %}
+          {% empty %}
+            <div class="text-center py-6 text-gray-400">
+              <span class="material-icons text-4xl opacity-50">inbox</span>
+              <p class="mt-2">
+                {% if filter_type == 'all' %}No tasks yet{% endif %}
+                {% if filter_type == 'active' %}No active tasks{% endif %}
+                {% if filter_type == 'completed' %}No completed tasks{% endif %}
+                {% if filter_type == 'overdue' %}No overdue tasks{% endif %}
+              </p>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="mt-4">
+          {% include 'boards/partials/task_form.html' with list_id=list.id %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>

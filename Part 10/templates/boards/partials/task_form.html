@@ -1,0 +1,30 @@
+<form hx-post="{% url 'add-task' list_id %}"
+      hx-target="#list-{{ list_id }}-tasks"
+      hx-swap="beforeend"
+      class="space-y-3 mt-4"
+      hx-on::after-request="this.reset()">
+  {% csrf_token %}
+
+  <input type="text"
+         name="title"
+         placeholder="Task title"
+         required
+         class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+  <textarea name="description"
+            placeholder="Description"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[80px]"></textarea>
+
+  <div class="flex items-center space-x-3">
+    <label class="text-sm text-gray-600">Due Date:</label>
+    <input type="date"
+           name="due_date"
+           class="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+  </div>
+
+  <button type="submit"
+          class="w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition flex items-center justify-center gap-2">
+    <span class="material-icons">add</span>
+    Add Task
+  </button>
+</form>

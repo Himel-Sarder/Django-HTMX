@@ -1,0 +1,41 @@
+<div id="task-{{ task.id }}" class="task-card bg-white p-4 mb-3 rounded-2xl shadow-md border-l-4 border-blue-500">
+  <form hx-post="{% url 'edit-task' task.id %}"
+        hx-target="#task-{{ task.id }}"
+        hx-swap="outerHTML"
+        class="space-y-3">
+    {% csrf_token %}
+
+    <input type="text"
+           name="title"
+           value="{{ task.title }}"
+           placeholder="Task title"
+           required
+           class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+    <textarea name="description"
+              placeholder="Description"
+              class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]">{{ task.description }}</textarea>
+
+    <div class="flex items-center space-x-3">
+      <label class="text-sm text-gray-600">Due Date:</label>
+      <input type="date"
+             name="due_date"
+             value="{{ task.due_date|date:'Y-m-d' }}"
+             class="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+
+    <div class="flex justify-end space-x-2 pt-2">
+      <button type="button"
+              hx-get="{% url 'edit-task' task.id %}"
+              hx-target="#task-{{ task.id }}"
+              hx-swap="outerHTML"
+              class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition">
+        Cancel
+      </button>
+      <button type="submit"
+              class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+        Save
+      </button>
+    </div>
+  </form>
+</div>
