@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TaskForge</title>
+
+    <!-- ✅ HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@1.9.6/dist/ext/ws.js"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+    <div class="container mx-auto px-4 py-6">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- HTMX CSRF Setup -->
+    <script>
+        document.body.addEventListener('htmx:configRequest', function(event) {
+            const token = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            event.detail.headers['X-CSRFToken'] = token;
+        });
+    </script>
+
+    <script>
+        function initSortable() {
+            document.querySelectorAll('.sortable-task-list').forEach(list => {
+                // Prevent reinitializing
+                if (list.dataset.sortableInitialized) return;
+                list.dataset.sortableInitialized = true;
+
+                Sortable.create(list, {
+                    animation: 150,
+                    onEnd: function (evt) {
+                        const listId = list.dataset.listId;
+                        const taskIds = Array.from(list.children)
+                            .map(item => item.id.replace('task-', ''));
+
+                        fetch(`/lists/${listId}/reorder-tasks/`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                            },
+                            body: JSON.stringify({ task_ids: taskIds })
+                        });
+                    }
+                });
+            });
+        }
+
+        // Init once on load
+        document.addEventListener('DOMContentLoaded', initSortable);
+
+        // Re-init every time HTMX swaps in new HTML
+        document.body.addEventListener('htmx:afterSwap', function (e) {
+            initSortable();
+        });
+    </script>
+
+
+
+    <style>
+        .task-card {
+            transition: all 0.3s ease;
+        }
+
+        .line-through {
+            transition: all 0.3s ease;
+        }
+
+        /* Optional: Add transition for the checkbox state */
+        input[type="checkbox"] {
+            transition: all 0.2s ease;
+        }
+        /* Add to your CSS */
+        .task-list {
+            min-height: 20px;
+        }
+
+        .sortable-chosen {
+            opacity: 0.8;
+            transform: scale(1.02);
+        }
+
+        .sortable-ghost {
+            opacity: 0.4;
+            background: #f0f9ff;
+            border: 1px dashed #bae6fd;
+        }
+    </style>
+
+</body>
+</html>

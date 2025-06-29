@@ -1,0 +1,25 @@
+<div id="board-container">
+    {% include 'boards/partials/filter_controls.html' with filter_type=filter_type %}
+
+    <div class="flex space-x-4 overflow-x-auto">
+        {% for list in lists %}
+            <div class="bg-gray-50 shadow rounded-lg p-4 w-80 min-w-[20rem]">
+                <h2 class="text-xl font-semibold mb-2">{{ list.name }}</h2>
+
+                <!-- Task Container -->
+                <div id="list-{{ list.id }}-tasks" data-list-id="{{ list.id }}" class="sortable-task-list">
+                    {% for task in list.filtered_tasks %}
+                        {% include 'boards/partials/task_card.html' with task=task %}
+                    {% empty %}
+                        <p class="text-gray-500 text-sm">No tasks in this category</p>
+                    {% endfor %}
+                </div>
+
+                <hr class="my-3">
+
+                <!-- Task Form -->
+                {% include 'boards/partials/task_form.html' with list_id=list.id %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
